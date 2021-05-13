@@ -1,0 +1,14 @@
+.confirm__container {
+  &__modal {
+    z-index: 9999;
+  }
+  .icon {
+    cursor: pointer;
+  }
+  .input {
+    width: 100%;
+  }
+  .invalid {
+    border: 2px solid red;
+  }
+}

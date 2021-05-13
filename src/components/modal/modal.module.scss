@@ -1,0 +1,68 @@
+@import './../../styles/mixin.scss';
+
+.modal__container {
+  margin-top: 3.1rem;
+  padding-bottom: 2rem;
+  margin-top: 0;
+  padding-top: 3rem;
+
+  &__row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+    &__label {
+      width: 6rem;
+      text-align: right;
+    }
+
+    &__button {
+      width: fit-content;
+      font-size: 1rem;
+      padding: 0rem 0.7rem;
+      margin-right: 0.7rem;
+    }
+    &__providers__block {
+      width: 38%;
+      min-height: 5vh;
+      max-height: 25vh;
+      overflow-y: scroll;
+      border: 1px solid #dee2e6;
+      margin-right: 2rem;
+
+      div {
+        display: flex;
+        justify-content: space-between;
+        span {
+          display: inline-block;
+          text-align: left;
+        }
+      }
+    }
+  }
+  .invalid {
+    border: 2px solid red;
+  }
+  .icon {
+    cursor: pointer;
+    margin: 5px;
+  }
+}
+
+@include media(991px) {
+  .modal__container {
+    &__row {
+      justify-content: unset;
+      &__label {
+        text-align: unset;
+      }
+      &__button {
+        margin: 1rem auto;
+        padding: 0.3rem 0.7rem;
+      }
+      &__providers__block {
+        width: 94% !important;
+        margin-left: 1rem;
+      }
+    }
+  }
+}
