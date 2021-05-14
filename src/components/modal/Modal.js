@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import classes from './modal.module.scss';
 import { Button, Modal, Form, Col, Row } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import ProvidersBlock from './provider/Providers';
+import Confirm from '../confirm/Confirm';
 import {
   createClient,
   editClient,
   resetModal,
 } from '../../redux/clients/clientsAC';
-import ProvidersBlock from './provider/Providers';
-import Confirm from '../confirm/Confirm';
 
 function ClientModal({ handleClose, type = 'Add' }) {
   const dispatch = useDispatch();
@@ -19,26 +19,28 @@ function ClientModal({ handleClose, type = 'Add' }) {
     (state) => state.providersReducer
   );
 
-  useEffect(() => {
-    if (createClientSuccess || editClientSuccess) {
-      handleClose();
-      dispatch(resetModal());
-    }
-  }, [createClientSuccess, editClientSuccess, dispatch, handleClose]);
-
   const [show, setShow] = useState(false);
-
-  const handleCloseConfirm = () => setShow(false);
-  const handleShowConfirm = () => {
-    setShow(true);
-  };
-
   const [values, setValues] = useState({
     name: '',
     email: '',
     phone: '',
     providers: [],
   });
+
+  const [errors, setErrors] = useState({
+    name: null,
+    email: null,
+    phone: null,
+  });
+
+  const inputRef = useRef();
+
+  useEffect(() => {
+    if (createClientSuccess || editClientSuccess) {
+      handleClose();
+      dispatch(resetModal());
+    }
+  }, [createClientSuccess, editClientSuccess, dispatch, handleClose]);
 
   useEffect(() => {
     if (type === 'Edit') {
@@ -56,13 +58,13 @@ function ClientModal({ handleClose, type = 'Add' }) {
         providers: [],
       });
     }
+    inputRef.current.focus();
   }, [type, client]);
 
-  const [errors, setErrors] = useState({
-    name: null,
-    email: null,
-    phone: null,
-  });
+  const handleCloseConfirm = () => setShow(false);
+  const handleShowConfirm = () => {
+    setShow(true);
+  };
 
   const handleChange = ({ target: { name, value } }) => {
     setValues({
@@ -152,6 +154,7 @@ function ClientModal({ handleClose, type = 'Add' }) {
                 <Col lg={7}>
                   <Form.Control
                     type='text'
+                    ref={inputRef}
                     name='name'
                     value={values.name || ''}
                     placeholder='Name'

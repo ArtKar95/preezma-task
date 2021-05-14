@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import classes from './confirm.module.scss';
 import { Modal } from 'react-bootstrap';
 import { CheckSquare, XSquare } from 'react-bootstrap-icons';
-import { useDispatch, useSelector } from 'react-redux';
 import {
   deleteProvider,
   editProvider,
@@ -11,17 +11,19 @@ import {
 import { deleteClient } from '../../redux/clients/clientsAC';
 
 const Confirm = ({ handleClose, type, handleCloseModal }) => {
+  const dispatch = useDispatch();
   const { provider, deleteProvidersuccess, editProviderSuccess } = useSelector(
     (state) => state.providersReducer
   );
   const { client } = useSelector((state) => state.clientsReducer);
   const { deleteClientSuccess } = useSelector((state) => state.clientsReducer);
 
-  const dispatch = useDispatch();
   const [providerEdit, setProviderEdit] = useState({ name: '' });
   const [providerErrors, setProviderErrors] = useState({
     name: null,
   });
+
+  const inputRef = useRef();
 
   useEffect(() => {
     if (deleteClientSuccess) {
@@ -45,6 +47,7 @@ const Confirm = ({ handleClose, type, handleCloseModal }) => {
   useEffect(() => {
     if (type === 'EditProvider') {
       setProviderEdit(provider);
+      inputRef.current.focus();
     }
   }, [type, provider]);
 
@@ -66,7 +69,6 @@ const Confirm = ({ handleClose, type, handleCloseModal }) => {
     } else {
       dispatch(deleteClient(client._id));
     }
-    // handleClose();
   };
 
   const handleChange = ({ target: { value } }) => {
@@ -92,6 +94,7 @@ const Confirm = ({ handleClose, type, handleCloseModal }) => {
           <Modal.Body>
             <input
               type='text'
+              ref={inputRef}
               placeholder='Provider'
               className={`${!!providerErrors.name ? classes.invalid : ''} ${
                 classes.input

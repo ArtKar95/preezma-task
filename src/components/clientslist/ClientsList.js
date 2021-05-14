@@ -1,29 +1,28 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import classes from './clientslist.module.scss';
 import { Table } from 'react-bootstrap';
 import ClientModal from '../modal/Modal';
-import { useDispatch, useSelector } from 'react-redux';
 import {
   getAllClients,
   getSingleClient,
   resetClient,
 } from '../../redux/clients/clientsAC';
 import { getAllProviders } from '../../redux/providers/providersAC';
-import '../../index.css';
 
 const ClientList = () => {
   const dispatch = useDispatch();
   const { clients } = useSelector((state) => state.clientsReducer);
   const { providers } = useSelector((state) => state.providersReducer);
 
+  const [show, setShow] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+
   useEffect(() => {
     dispatch(getAllProviders());
     dispatch(getAllClients());
     // eslint-disable-next-line
   }, []);
-
-  const [show, setShow] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => {

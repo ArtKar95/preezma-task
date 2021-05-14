@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import classes from './../modal.module.scss';
 import { Button, Form, Col, Row } from 'react-bootstrap';
 import { Trash, PencilSquare } from 'react-bootstrap-icons';
-import { useDispatch, useSelector } from 'react-redux';
+import Confirm from '../../confirm/Confirm';
 import {
   getAllProviders,
   createProvider,
@@ -10,40 +11,24 @@ import {
   getCheckedProviders,
   editCheckedProviders,
 } from '../../../redux/providers/providersAC';
-import Confirm from '../../confirm/Confirm';
 
 function ProvidersBlock() {
+  const dispatch = useDispatch();
+  const { providers } = useSelector((state) => state.providersReducer);
+  const { client } = useSelector((state) => state.clientsReducer);
+
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [provider, setProvider] = useState({ name: '' });
   const [providerErrors, setProviderErrors] = useState({
     name: null,
   });
-
-  const dispatch = useDispatch();
-  const { providers } = useSelector((state) => state.providersReducer);
-  const { client } = useSelector((state) => state.clientsReducer);
+  const [checkedProvidersData, setcheckedProvidersData] = useState([]);
+  const [checkedProvidersEdit, setCheckedProvidersEdit] = useState();
 
   useEffect(() => {
     setCheckedProvidersEdit(client?.providers);
   }, [client, client.providers]);
-
-  const [checkedProvidersData, setcheckedProvidersData] = useState([]);
-  const [checkedProvidersEdit, setCheckedProvidersEdit] = useState();
-
-  const takeCheckedProviders = (id) => {
-    let checkedProviders = new Set(checkedProvidersData);
-    checkedProviders.has(id)
-      ? checkedProviders.delete(id)
-      : checkedProviders.add(id);
-    setcheckedProvidersData([...checkedProviders]);
-
-    let checkedProvidersEditData = new Set(checkedProvidersEdit);
-    checkedProvidersEditData.has(id)
-      ? checkedProvidersEditData.delete(id)
-      : checkedProvidersEditData.add(id);
-    setCheckedProvidersEdit([...checkedProvidersEditData]);
-  };
 
   useEffect(() => {
     dispatch(getAllProviders());
@@ -65,6 +50,20 @@ function ProvidersBlock() {
       )
     );
   }, [checkedProvidersEdit, providers, dispatch]);
+
+  const takeCheckedProviders = (id) => {
+    let checkedProviders = new Set(checkedProvidersData);
+    checkedProviders.has(id)
+      ? checkedProviders.delete(id)
+      : checkedProviders.add(id);
+    setcheckedProvidersData([...checkedProviders]);
+
+    let checkedProvidersEditData = new Set(checkedProvidersEdit);
+    checkedProvidersEditData.has(id)
+      ? checkedProvidersEditData.delete(id)
+      : checkedProvidersEditData.add(id);
+    setCheckedProvidersEdit([...checkedProvidersEditData]);
+  };
 
   const handleCloseEdit = () => setShowEdit(false);
   const handleShowEdit = (id) => {

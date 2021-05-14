@@ -1,11 +1,12 @@
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import './App.scss';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import ClientList from './components/clientslist/ClientsList';
 import Loader from './components/loader/Loader';
-import { useEffect } from 'react';
+import NotFoundPage from './components/notFoundPage/NotFoundPage';
 
 function App() {
   const { clientLoading, clientSuccessMessage, clientError } = useSelector(
@@ -16,17 +17,13 @@ function App() {
     useSelector((state) => state.providersReducer);
 
   useEffect(() => {
-    if (clientSuccessMessage) {
-      toast.success(clientSuccessMessage);
+    const successMessage = clientSuccessMessage || providerSuccessMessage;
+    if (successMessage) {
+      toast.success(successMessage);
     }
-    if (clientError) {
-      toast.error(clientError);
-    }
-    if (providerSuccessMessage) {
-      toast.success(providerSuccessMessage);
-    }
-    if (providerError) {
-      toast.error(providerError);
+    const errorMessage = clientError || providerError;
+    if (errorMessage) {
+      toast.error(errorMessage);
     }
   }, [
     clientSuccessMessage,
@@ -34,11 +31,12 @@ function App() {
     providerSuccessMessage,
     providerError,
   ]);
+
   return (
     <>
       <Switch>
         <Route path='/' exact component={ClientList} />
-        {/* <Route path="*" exact component={NotFoundPage} /> */}
+        <Route path='*' exact component={NotFoundPage} />
       </Switch>
 
       <ToastContainer
