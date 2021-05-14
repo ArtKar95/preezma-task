@@ -25,7 +25,7 @@ export const getAllClients = () => {
   return async (dispatch) => {
     try {
       dispatch({ type: actionTypes.CLIENT_LOADER });
-      const response = await axios.get(`${apiUrl}/api/clients`);
+      const response = await axios.get(`${apiUrl}/api/client`);
       dispatch({
         type: actionTypes.GET_CLIENTS_SUCCESS,
         payload: response.data,
@@ -98,8 +98,6 @@ export const resetClient = (id) => {
     dispatch({ type: actionTypes.RESET_CLIENT });
   };
 };
-
-
 
 export const resetModal = (id) => {
   return (dispatch) => {

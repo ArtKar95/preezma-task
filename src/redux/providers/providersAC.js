@@ -25,7 +25,7 @@ export const getAllProviders = () => {
   return async (dispatch) => {
     try {
       dispatch({ type: actionTypes.PROVIDER_LOADER });
-      const response = await axios.get(`${apiUrl}/api/providers`);
+      const response = await axios.get(`${apiUrl}/api/provider`);
       dispatch({
         type: actionTypes.GET_PROVIDERS_SUCCESS,
         payload: response.data,
