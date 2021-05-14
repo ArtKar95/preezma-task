@@ -135,11 +135,7 @@ function ProvidersBlock() {
                   <input
                     type='checkbox'
                     name=''
-                    id=''
                     onChange={() => takeCheckedProviders(item._id)}
-                    // defaultChecked={
-                    //   checkedProvidersEdit?.includes(item._id) ? true : false
-                    // }
                     checked={
                       checkedProvidersEdit?.includes(item._id) ? true : false
                     }
